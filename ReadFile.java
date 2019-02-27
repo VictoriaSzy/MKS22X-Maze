@@ -17,5 +17,6 @@ public class ReadFile {
     catch (Exception e) {
       System.out.println("There is a strange exception that was triggered!") ;
     }
+    
   }
 }
