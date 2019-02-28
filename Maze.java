@@ -79,6 +79,20 @@ public class Maze {
     //erase terminal, go to top left of screen.
     System.out.println("\033[2J\033[1;1H") ;
   }
+  /*Return the string that represents the maze.
+     It should look like the text file with some characters replaced.
+  */
+  public String toString() {
+    String res = "" ;
+    for (int row = 0 ; row < maze.length ; row++) {
+      for (int col = 0 ; col < maze[0].length ; col++) {
+        res += maze[row][col] ;
+      }
+      res += "\n" ;
+    }
+    return res ;
+  }
+
 
   /*Wrapper Solve Function returns the helper function
   Note the helper function has the same name, but different parameters.
