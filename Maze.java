@@ -35,24 +35,32 @@ public class Maze {
       //System.out.println(line) ;
     }
     maze = new int[len][width] ;
-    
+    Scanner adding = new Scanner(f) ;
+    int row = 0 ;
+    while (s.hasNextLine() && row < maze.length) {
+      String line = s.nextLine() ;
+      for (int i = 0 ; i < line.length() ; i++) {
+        maze[row][i] = line.charAt(i) ;
+      }
+      //System.out.println(line) ;
+    }
   }
 
   private void wait(int millis) {
     try {
-      Thread.sleep(millis);
+      Thread.sleep(millis) ;
     }
     catch (InterruptedException e) {
     }
   }
   // mutator method
   public void setAnimate(boolean b) {
-    animate = b;
+    animate = b ;
   }
 
   public void clearTerminal() {
     //erase terminal, go to top left of screen.
-    System.out.println("\033[2J\033[1;1H");
+    System.out.println("\033[2J\033[1;1H") ;
   }
 
   /*Wrapper Solve Function returns the helper function
