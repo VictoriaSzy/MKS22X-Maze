@@ -18,6 +18,24 @@ public class Maze {
   */
   public Maze(String filename) throws FileNotFoundException {
     //COMPLETE CONSTRUCTOR
+    int len = 0 ;
+    int width = 0 ;
+    int tempW = 0 ;
+    animate = false ;
+    File f = new File(filename) ;
+    Scanner s = new Scanner(f) ;
+    while (s.hasNextLine()) {
+      String line = s.nextLine() ;
+      len++ ;
+      tempW = 0 ;
+      for (int i = 0 ; i < line.length() ; i++) {
+        tempW++ ;
+      }
+      if (tempW > width) width = tempW ;
+      //System.out.println(line) ;
+    }
+    maze = new int[len][width] ;
+    
   }
 
   private void wait(int millis) {
