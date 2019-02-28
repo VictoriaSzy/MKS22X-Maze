@@ -58,7 +58,7 @@ public class Maze {
       }
       //System.out.println(line) ;
     }
-    if (rowOfS == -1 || colOfS == -1) {
+    if (rowOfS == -1 || colOfS == -1 || rowOfE == -1 || colOfE == -1) {
       throw new IllegalStateException("The start and end are either missing, or there's too many of them!") ;
     }
   }
@@ -86,10 +86,11 @@ public class Maze {
   */
   public int solve() {
     //find the location of the S.
+    // maze[rowOfS][colOfS] is the starting point (found in the constructor)
     //erase the S
+    maze[rowOfS][colOfS] = '@' ;
     //and start solving at the location of the s.
-    //return solve(???,???);
-
+    return solve(rowOfS, colOfS) ;
   }
 
   /*
