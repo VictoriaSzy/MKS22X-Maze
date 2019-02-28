@@ -3,7 +3,7 @@ import java.io.* ;
 public class Maze {
   private char[][] maze ;
   private boolean animate ; // false by default
-  private rowOfS, colOfS ;
+  private rowOfS, colOfS, rowOfE, colOfE ;
   /*Constructor loads a maze text file, and sets animate to false by default.
 
   1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -40,6 +40,8 @@ public class Maze {
     int row = 0 ;
     rowOfS = -1 ;
     colOfS = -1 ;
+    rowOfE = -1 ;
+    colOfE = -1 ;
     while (s.hasNextLine() && row < maze.length) {
       String line = s.nextLine() ;
       for (int i = 0 ; i < line.length() ; i++) {
@@ -48,11 +50,17 @@ public class Maze {
           rowOfS = row ;
           colOfS = i ;
         }
+        if (line.charAt(i) == 'E') {
+          rowOfE = row ;
+          colOfE = i ;
+        }
         row++ ;
       }
       //System.out.println(line) ;
     }
-    if (rowOfS == -1 || colOfS == -1) throw new IllegalStateException("The start and end are either missing, or there's too many of them!") ;
+    if (rowOfS == -1 || colOfS == -1) {
+      throw new IllegalStateException("The start and end are either missing, or there's too many of them!") ;
+    }
   }
 
   private void wait(int millis) {
