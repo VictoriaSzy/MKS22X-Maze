@@ -4,6 +4,7 @@ public class Maze {
   private char[][] maze ;
   private boolean animate ; // false by default
   private int rowOfS, colOfS, rowOfE, colOfE, lengthOfSolution ;
+  private int[][] directions ;
   /*Constructor loads a maze text file, and sets animate to false by default.
 
   1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -20,6 +21,7 @@ public class Maze {
   public Maze(String filename) throws FileNotFoundException {
     //COMPLETE CONSTRUCTOR
     lengthOfSolution = 0 ;
+    int[][] moves = { {0,-1}, {0,1}, {-1,0}, {1,0} } ;
     int len = 0 ;
     int width = 0 ;
     int tempW = 0 ;
@@ -39,6 +41,9 @@ public class Maze {
     maze = new char[len][width] ;
     Scanner adding = new Scanner(f) ;
     int row = 0 ;
+    int numberOfStarts = 0 ;
+    int numberOfEnds = 0 ;
+    int
     rowOfS = -1 ;
     colOfS = -1 ;
     rowOfE = -1 ;
@@ -50,16 +55,18 @@ public class Maze {
         if (line.charAt(i) == 'S') {
           rowOfS = row ;
           colOfS = i ;
+          numberOfStarts++ ;
         }
         if (line.charAt(i) == 'E') {
           rowOfE = row ;
           colOfE = i ;
+          numberOfEnds++ ;
         }
         row++ ;
       }
       //System.out.println(line) ;
     }
-    if (rowOfS == -1 || colOfS == -1 || rowOfE == -1 || colOfE == -1) {
+    if (rowOfS == -1 || rowOfE == -1 || numberOfStarts > 1 || numberOfEnds > 1) {
       throw new IllegalStateException("The start and end are either missing, or there's too many of them!") ;
     }
   }
@@ -130,10 +137,15 @@ public class Maze {
       wait(20) ;
     }
     //COMPLETE SOLVE
-    if (maze[row][col] == '#') {
-      // we have found a wall/border! --> we can't go any further!
+    char current = maze[row][col] ;
+    if (current == '#' || current == '.' || current == '@') {
+      /* we have found a wall/border! --> we can't go any further! OR
+      we have found a dead end or position that isn't part of the solution OR
+      we are visiting the same spot again!
+      */
       return false ;
     }
+    // otherwise if the spot is clear, we can continue to see if we can find a solution
     return false ; //so it compiles
   }
 }
