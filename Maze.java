@@ -3,7 +3,7 @@ import java.io.* ;
 public class Maze {
   private char[][] maze ;
   private boolean animate ; // false by default
-  private rowOfS, colOfS, rowOfE, colOfE ;
+  private int rowOfS, colOfS, rowOfE, colOfE ;
   /*Constructor loads a maze text file, and sets animate to false by default.
 
   1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -35,7 +35,7 @@ public class Maze {
       if (tempW > width) width = tempW ;
       //System.out.println(line) ;
     }
-    maze = new int[len][width] ;
+    maze = new char[len][width] ;
     Scanner adding = new Scanner(f) ;
     int row = 0 ;
     rowOfS = -1 ;
