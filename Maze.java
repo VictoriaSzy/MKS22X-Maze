@@ -21,7 +21,9 @@ public class Maze {
   public Maze(String filename) throws FileNotFoundException {
     //COMPLETE CONSTRUCTOR
     lengthOfSolution = 0 ;
-    int[][] moves = { {0,-1}, {0,1}, {-1,0}, {1,0} } ;
+    int[][] moves = { {0, -1}, {-1, 0}, {0, 1}, {1, 0} } ;
+    //                  left      up    right    down
+    directions = moves ;
     int len = 0 ;
     int width = 0 ;
     int tempW = 0 ;
@@ -101,7 +103,6 @@ public class Maze {
     return res ;
   }
 
-
   /*Wrapper Solve Function returns the helper function
   Note the helper function has the same name, but different parameters.
   Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
@@ -112,10 +113,7 @@ public class Maze {
     //erase the S
     maze[rowOfS][colOfS] = '@' ;
     //and start solving at the location of the s.
-    if (solve(rowOfS, colOfS)) return lengthOfSolution ;
-    else {
-      return -1 ;
-    }
+    return solve(rowOfS, colOfS) ;
   }
 
   /*
@@ -129,7 +127,7 @@ public class Maze {
     All visited spots that were not part of the solution are changed to '.'
     All visited spots that are part of the solution are changed to '@'
   */
-  private boolean solve(int row, int col) { //you can add more parameters since this is private
+  private int solve(int row, int col) { //you can add more parameters since this is private
     //automatic animation! You are welcome.
     if (animate) {
       clearTerminal() ;
@@ -143,9 +141,10 @@ public class Maze {
       we have found a dead end or position that isn't part of the solution OR
       we are visiting the same spot again!
       */
-      return false ;
+      return -1 ;
     }
     // otherwise if the spot is clear, we can continue to see if we can find a solution
-    return false ; //so it compiles
+
+    return -1 ; //so it compiles
   }
 }
