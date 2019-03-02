@@ -3,7 +3,7 @@ import java.io.* ;
 
 public class DriverK {
   public static void main(String[]args) {
-    String filename = "data1.dat";
+    String filename = args[0] ;
     try{
       Maze f;
       f = new Maze(filename);//true animates the maze.
