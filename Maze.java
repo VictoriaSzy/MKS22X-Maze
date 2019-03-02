@@ -3,7 +3,7 @@ import java.io.* ;
 public class Maze {
   private char[][] maze ;
   private boolean animate ; // false by default
-  private int rowOfS, colOfS, rowOfE, colOfE, lengthOfSolution ;
+  private int rowOfS, colOfS ;
   private int[][] directions ;
   /*Constructor loads a maze text file, and sets animate to false by default.
 
@@ -19,56 +19,42 @@ public class Maze {
          throw a FileNotFoundException or IllegalStateException
   */
   public Maze(String filename) throws FileNotFoundException {
-    //COMPLETE CONSTRUCTOR
-    lengthOfSolution = 0 ;
+    animate = false ;
     int[][] moves = { {0, -1}, {-1, 0}, {0, 1}, {1, 0} } ;
     //                  left      up    right    down
     directions = moves ;
-    int len = 0 ;
-    int width = 0 ;
-    int tempW = 0 ;
-    animate = false ;
+    //// THIS SECTION FINDS THE DIMENSIONS OF THE MAZE
+    int len = 0, width = 0 ;
     File f = new File(filename) ;
     Scanner s = new Scanner(f) ;
+    String line = "" ;
     while (s.hasNextLine()) {
-      String line = s.nextLine() ;
+      line = s.nextLine() ;
       len++ ;
-      tempW = 0 ;
-      for (int i = 0 ; i < line.length() ; i++) {
-        tempW++ ;
-      }
-      if (tempW > width) width = tempW ;
       //System.out.println(line) ;
     }
+    width = line.length() ;
     maze = new char[len][width] ;
+    // After creating the 2D array, we need to check how many starts and ends there are & add the chars to the 2D array
     Scanner adding = new Scanner(f) ;
-    int row = 0 ;
-    int numberOfStarts = 0 ;
-    int numberOfEnds = 0 ;
-    int
+    int row = 0, numberOfStarts = 0, numberOfEnds = 0 ;
     rowOfS = -1 ;
     colOfS = -1 ;
-    rowOfE = -1 ;
-    colOfE = -1 ;
-    while (s.hasNextLine() && row < maze.length) {
-      String line = s.nextLine() ;
+    while (adding.hasNextLine() && row < maze.length) {
+      line = adding.nextLine() ;
       for (int i = 0 ; i < line.length() ; i++) {
         maze[row][i] = line.charAt(i) ;
         if (line.charAt(i) == 'S') {
           rowOfS = row ;
           colOfS = i ;
-          numberOfStarts++ ;
+          numberOfStarts+= 1 ;
         }
-        if (line.charAt(i) == 'E') {
-          rowOfE = row ;
-          colOfE = i ;
-          numberOfEnds++ ;
-        }
-        row++ ;
+        if (line.charAt(i) == 'E') numberOfEnds+= 1 ;
       }
+      row++ ;
       //System.out.println(line) ;
     }
-    if (rowOfS == -1 || rowOfE == -1 || numberOfStarts > 1 || numberOfEnds > 1) {
+    if (rowOfS == -1 || numberOfStarts != 1 || numberOfEnds != 1) {
       throw new IllegalStateException("The start and end are either missing, or there's too many of them!") ;
     }
   }
@@ -113,7 +99,7 @@ public class Maze {
     //erase the S
     maze[rowOfS][colOfS] = '@' ;
     //and start solving at the location of the s.
-    return solve(rowOfS, colOfS) ;
+    return solve(rowOfS, colOfS,0) ;
   }
 
   /*
@@ -127,34 +113,38 @@ public class Maze {
     All visited spots that were not part of the solution are changed to '.'
     All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col) { //you can add more parameters since this is private
+  private int solve(int row, int col, int lengthOfSolution) { //you can add more parameters since this is private
     //automatic animation! You are welcome.
     if (animate) {
       clearTerminal() ;
       System.out.println(this) ;
       wait(20) ;
     }
-    if (row < 0 || row > maze.length - 1 || col < 0 || col > maze[0].length - 1) return -1 ;
-    if (row == rowOfE && col == colOfE) return 1 ;
-    int ans = 0 ;
-    char current = maze[row][col] ;
-    if (current == '#' || current == '.' || current == '@') {
-      /* we have found a wall/border! --> we can't go any further! OR
-      we have found a dead end or position that isn't part of the solution OR
-      we are visiting the same spot again!
-      */
-      return -1 ;
+    if (maze[row][col] == 'E') {
+      setAnimate(false) ;
+      System.out.println(lengthOfSolution) ;
+      return lengthOfSolution ;
     }
-    // otherwise if the spot is clear, we can continue to see if we can find a solution
-    maze[row][col] = '@' ;
     int tempR, tempC ;
-    for (int i = 0 ; i < directions.length ; i++) {
+    for (int i = 0 ; i < 4 ; i++) {
+      //System.out.println(this) ;
       tempR = row + directions[i][0] ;
       tempC = col + directions[i][1] ;
-      ans = solve(tempR, tempC) ;
-      if (ans != - 1) return ans ;
+      if (tempR >= 0 && tempR <= maze.length - 1 && tempC >= 0
+      && tempC <= maze[0].length - 1 && maze[tempR][tempC] == ' ') {
+        // this move is valid so let's try it!
+        maze[tempR][tempC] = '@' ;
+        solve(tempR, tempC, lengthOfSolution + 1) ;
+      }
     }
-    maze[row][col] = '.' ;
+    //System.out.println("Finished the first for loop!") ;
+    for (int a = 0 ; a < 4 ; a++) {
+      tempR = row + directions[a][0] ;
+      tempC = col + directions[a][1] ;
+      if (maze[tempR][tempC] == 'E') solve(tempR, tempC, lengthOfSolution) ;
+    }
+    maze[row][col] = '•' ;
+    lengthOfSolution-- ;
     return -1 ; //so it compiles
   }
 }
