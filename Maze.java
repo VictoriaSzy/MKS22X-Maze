@@ -3,7 +3,7 @@ import java.io.* ;
 public class Maze {
   private char[][] maze ;
   private boolean animate ; // false by default
-  private int rowOfS, colOfS, rowOfE, colOfE ;
+  private int rowOfS, colOfS, rowOfE, colOfE, lengthOfSolution ;
   /*Constructor loads a maze text file, and sets animate to false by default.
 
   1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -19,6 +19,7 @@ public class Maze {
   */
   public Maze(String filename) throws FileNotFoundException {
     //COMPLETE CONSTRUCTOR
+    lengthOfSolution = 0 ;
     int len = 0 ;
     int width = 0 ;
     int tempW = 0 ;
@@ -104,7 +105,10 @@ public class Maze {
     //erase the S
     maze[rowOfS][colOfS] = '@' ;
     //and start solving at the location of the s.
-    return solve(rowOfS, colOfS) ;
+    if (solve(rowOfS, colOfS)) return lengthOfSolution ;
+    else {
+      return -1 ;
+    }
   }
 
   /*
@@ -118,14 +122,18 @@ public class Maze {
     All visited spots that were not part of the solution are changed to '.'
     All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col) { //you can add more parameters since this is private
+  private boolean solve(int row, int col) { //you can add more parameters since this is private
     //automatic animation! You are welcome.
-    if(animate) {
+    if (animate) {
       clearTerminal() ;
       System.out.println(this) ;
       wait(20) ;
     }
     //COMPLETE SOLVE
-    return -1 ; //so it compiles
+    if (maze[row][col] == '#') {
+      // we have found a wall/border! --> we can't go any further!
+      return false ;
+    }
+    return false ; //so it compiles
   }
 }
