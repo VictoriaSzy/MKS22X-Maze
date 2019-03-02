@@ -134,7 +134,9 @@ public class Maze {
       System.out.println(this) ;
       wait(20) ;
     }
-    //COMPLETE SOLVE
+    if (row < 0 || row > maze.length - 1 || col < 0 || col > maze[0].length - 1) return -1 ;
+    if (row == rowOfE && col == colOfE) return 1 ;
+    int ans = 0 ;
     char current = maze[row][col] ;
     if (current == '#' || current == '.' || current == '@') {
       /* we have found a wall/border! --> we can't go any further! OR
@@ -144,7 +146,15 @@ public class Maze {
       return -1 ;
     }
     // otherwise if the spot is clear, we can continue to see if we can find a solution
-
+    maze[row][col] = '@' ;
+    int tempR, tempC ;
+    for (int i = 0 ; i < directions.length ; i++) {
+      tempR = row + directions[i][0] ;
+      tempC = col + directions[i][1] ;
+      ans = solve(tempR, tempC) ;
+      if (ans != - 1) return ans ;
+    }
+    maze[row][col] = '.' ;
     return -1 ; //so it compiles
   }
 }
