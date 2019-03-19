@@ -113,16 +113,17 @@ public class Maze {
     All visited spots that were not part of the solution are changed to '.'
     All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col, int lengthOfSolution) { //you can add more parameters since this is private
+  private int solve(int row, int col, int lengthOfSolution) {
+    //you can add more parameters since this is private
     //automatic animation! You are welcome.
-    if (animate) {
+    /*if (animate) {
       clearTerminal() ;
       System.out.println(this) ;
       wait(20) ;
-    }
+    }*/
     if (maze[row][col] == 'E') {
-      setAnimate(false) ;
-      System.out.println(lengthOfSolution) ;
+      //setAnimate(false) ;
+      //System.out.println(lengthOfSolution) ;
       return lengthOfSolution ;
     }
     int tempR, tempC ;
@@ -134,14 +135,16 @@ public class Maze {
       && tempC <= maze[0].length - 1 && maze[tempR][tempC] == ' ') {
         // this move is valid so let's try it!
         maze[tempR][tempC] = '@' ;
-        solve(tempR, tempC, lengthOfSolution + 1) ;
+        int xx = solve(tempR, tempC, lengthOfSolution + 1) ;
+        if (xx != -1) return xx ;
       }
     }
     //System.out.println("Finished the first for loop!") ;
     for (int a = 0 ; a < 4 ; a++) {
       tempR = row + directions[a][0] ;
       tempC = col + directions[a][1] ;
-      if (maze[tempR][tempC] == 'E') solve(tempR, tempC, lengthOfSolution) ;
+      if (maze[tempR][tempC] == 'E') return lengthOfSolution;
+      //solve(tempR, tempC, lengthOfSolution) ;
     }
     maze[row][col] = '•' ;
     lengthOfSolution-- ;
