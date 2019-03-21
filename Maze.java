@@ -143,7 +143,7 @@ public class Maze {
     for (int a = 0 ; a < 4 ; a++) {
       tempR = row + directions[a][0] ;
       tempC = col + directions[a][1] ;
-      if (maze[tempR][tempC] == 'E') return lengthOfSolution;
+      if (maze[tempR][tempC] == 'E') return lengthOfSolution + 1 ;
       //solve(tempR, tempC, lengthOfSolution) ;
     }
     maze[row][col] = '•' ;
